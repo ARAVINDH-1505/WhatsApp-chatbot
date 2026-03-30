@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Minutes Delivery — Kitchen Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--g:#075E54;--mg:#128C7E;--lg:#25D366;--f:'Inter',sans-serif}
+body{font-family:var(--f);background:#0f1923;color:#e8ecf0;min-height:100vh}
+
+.topbar{background:#0d1117;border-bottom:1px solid rgba(255,255,255,.08);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--g),var(--mg));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.logo-text{font-size:16px;font-weight:700;color:#fff}
+.logo-sub{font-size:11px;color:rgba(255,255,255,.5);font-weight:400}
+.live-badge{display:flex;align-items:center;gap:6px;background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.3);color:#25D366;font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px}
+.live-dot{width:7px;height:7px;background:#25D366;border-radius:50%;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+
+.main{max-width:760px;margin:0 auto;padding:24px 16px}
+
+.section-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08)}
+
+/* Order card */
+.order-card{background:#1a2332;border-radius:16px;overflow:hidden;margin-bottom:16px;border:1px solid rgba(255,255,255,.07);transition:border-color .2s}
+.order-card.active{border-color:rgba(37,211,102,.25)}
+.order-card.delivered{opacity:.6}
+
+.ocard-hdr{background:#0d1117;padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
+.ocard-id{font-size:15px;font-weight:700;color:#fff}
+.ocard-time{font-size:12px;color:rgba(255,255,255,.45)}
+
+.status-badge{font-size:11px;font-weight:600;padding:4px 10px;border-radius:12px;text-transform:uppercase;letter-spacing:.5px}
+.sb-paid{background:rgba(99,102,241,.2);color:#818cf8;border:1px solid rgba(99,102,241,.3)}
+.sb-preparing{background:rgba(245,158,11,.15);color:#fbbf24;border:1px solid rgba(245,158,11,.25)}
+.sb-ready{background:rgba(37,211,102,.15);color:#25D366;border:1px solid rgba(37,211,102,.25)}
+.sb-out{background:rgba(59,130,246,.15);color:#60a5fa;border:1px solid rgba(59,130,246,.25)}
+.sb-delivered{background:rgba(255,255,255,.08);color:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.1)}
+
+.ocard-body{padding:16px 18px}
+.oitem{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.oitem:last-of-type{border:none;margin-bottom:8px}
+.oitem-name{font-size:14px;color:#e8ecf0;display:flex;align-items:center;gap:8px}
+.oitem-price{font-size:14px;font-weight:600;color:var(--lg)}
+.oinfo{font-size:12.5px;color:rgba(255,255,255,.45);line-height:1.7;margin:8px 0 14px}
+
+.ocard-actions{display:flex;gap:8px;flex-wrap:wrap}
+.abtn{flex:1;min-width:130px;padding:10px 14px;border:none;border-radius:10px;font-size:13px;font-weight:600;font-family:var(--f);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.abtn:disabled{opacity:.3;cursor:not-allowed}
+.abtn-prep{background:rgba(245,158,11,.15);color:#fbbf24;border:1px solid rgba(245,158,11,.3)}
+.abtn-prep:hover:not(:disabled){background:rgba(245,158,11,.25)}
+.abtn-ready{background:rgba(37,211,102,.12);color:#25D366;border:1px solid rgba(37,211,102,.25)}
+.abtn-ready:hover:not(:disabled){background:rgba(37,211,102,.22)}
+.abtn-out{background:rgba(59,130,246,.12);color:#60a5fa;border:1px solid rgba(59,130,246,.25)}
+.abtn-out:hover:not(:disabled){background:rgba(59,130,246,.22)}
+.abtn-done{background:rgba(255,255,255,.06);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.12)}
+.abtn-done:hover:not(:disabled){background:rgba(255,255,255,.12)}
+
+/* Timeline */
+.timeline{display:flex;align-items:center;padding:0 0 14px;gap:0;overflow:hidden}
+.tl-step{display:flex;flex-direction:column;align-items:center;flex:1;position:relative}
+.tl-step::before{content:'';position:absolute;top:10px;left:50%;right:-50%;height:2px;background:rgba(255,255,255,.1)}
+.tl-step:last-child::before{display:none}
+.tl-dot{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.15);background:#1a2332;display:flex;align-items:center;justify-content:center;font-size:9px;z-index:1;position:relative}
+.tl-dot.done{background:var(--lg);border-color:var(--lg)}
+.tl-dot.active{background:rgba(37,211,102,.2);border-color:var(--lg);box-shadow:0 0 0 3px rgba(37,211,102,.15)}
+.tl-lbl{font-size:9px;color:rgba(255,255,255,.3);margin-top:4px;text-align:center;white-space:nowrap}
+.tl-lbl.done,.tl-lbl.active{color:var(--lg)}
+
+/* Empty state */
+.empty{text-align:center;padding:60px 24px;color:rgba(255,255,255,.25)}
+.empty-icon{font-size:48px;margin-bottom:12px}
+.empty-text{font-size:15px}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;right:24px;background:#1a2332;border:1px solid rgba(37,211,102,.3);color:#25D366;padding:12px 18px;border-radius:10px;font-size:13px;font-weight:500;z-index:100;animation:toastIn .3s ease;display:none;max-width:280px}
+@keyframes toastIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+.refresh-hint{text-align:center;font-size:12px;color:rgba(255,255,255,.2);margin-top:30px}
+.refresh-hint a{color:var(--mg);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon">🐟</div>
+    <div>
+      <div class="logo-text">Minutes Delivery</div>
+      <div class="logo-sub">Kitchen Dashboard</div>
+    </div>
+  </div>
+  <div class="live-badge"><div class="live-dot"></div>Live</div>
+</div>
+
+<div class="main">
+  <div class="section-label">Active Orders</div>
+  <div id="active-orders"></div>
+  <div class="section-label" style="margin-top:32px">Completed Orders</div>
+  <div id="done-orders"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STATUSES = ['paid','preparing','ready','out_for_delivery','delivered'];
+const STATUS_LABELS = {
+  paid:'Payment Confirmed',
+  preparing:'Preparing',
+  ready:'Ready to Deliver',
+  out_for_delivery:'Out for Delivery',
+  delivered:'Delivered'
+};
+const STATUS_BADGE = {
+  paid:'sb-paid',
+  preparing:'sb-preparing',
+  ready:'sb-ready',
+  out_for_delivery:'sb-out',
+  delivered:'sb-delivered'
+};
+const TL_LABELS = ['Paid','Preparing','Packed','Delivering','Delivered'];
+
+let orders = [];
+
+// Load from localStorage
+const saved = localStorage.getItem('md_order');
+if (saved) {
+  try {
+    const o = JSON.parse(saved);
+    if (o && o.id) orders.push(o);
+  } catch(e) {}
+}
+
+// BroadcastChannel
+let ch;
+try { ch = new BroadcastChannel('md-demo'); } catch(e) { ch = null; }
+if (ch) {
+  ch.onmessage = e => {
+    if (e.data.type === 'NEW_ORDER') {
+      const o = e.data.order;
+      if (o && o.id && !orders.find(x => x.id === o.id)) {
+        orders.unshift({ ...o, status: 'paid', ts: Date.now() });
+        render();
+        showToast('🔔 New order received! #' + o.id);
+      }
+    }
+  };
+}
+
+function updateStatus(id, newStatus) {
+  const o = orders.find(x => x.id === id);
+  if (!o) return;
+  o.status = newStatus;
+  localStorage.setItem('md_order', JSON.stringify(o));
+  if (ch) ch.postMessage({ type: 'STATUS', status: newStatus, orderId: id });
+  render();
+  const labels = {
+    preparing:'👨‍🍳 Sent: Order is being prepared',
+    ready:'✅ Sent: Ready to deliver',
+    out_for_delivery:'🛵 Sent: Out for delivery',
+    delivered:'🎉 Sent: Delivered notification',
+  };
+  showToast(labels[newStatus] || 'Status updated');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 3500);
+}
+
+function renderCard(o) {
+  const si = STATUSES.indexOf(o.status);
+  const tl = TL_LABELS.map((l,i) => {
+    const cls = i < si ? 'done' : i === si ? 'active' : '';
+    return `<div class="tl-step"><div class="tl-dot ${cls}">${i < si ? '✓' : i+1}</div><div class="tl-lbl ${cls}">${l}</div></div>`;
+  }).join('');
+
+  const next = STATUSES[si + 1];
+  const actions = {
+    paid:            `<button class="abtn abtn-prep" onclick="updateStatus('${o.id}','preparing')">👨‍🍳 Start Preparing</button>`,
+    preparing:       `<button class="abtn abtn-ready" onclick="updateStatus('${o.id}','ready')">✅ Mark Ready</button>`,
+    ready:           `<button class="abtn abtn-out" onclick="updateStatus('${o.id}','out_for_delivery')">🛵 Out for Delivery</button>`,
+    out_for_delivery:`<button class="abtn abtn-done" onclick="updateStatus('${o.id}','delivered')">🎉 Mark Delivered</button>`,
+    delivered:       `<button class="abtn abtn-done" disabled>✓ Completed</button>`,
+  };
+
+  return `
+    <div class="order-card ${o.status === 'delivered' ? 'delivered' : 'active'}" id="card-${o.id}">
+      <div class="ocard-hdr">
+        <div>
+          <div class="ocard-id">Order #${o.id}</div>
+          <div class="ocard-time">Placed ${new Date(o.ts||Date.now()).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true})}</div>
+        </div>
+        <div class="status-badge ${STATUS_BADGE[o.status]}">${STATUS_LABELS[o.status]}</div>
+      </div>
+      <div class="ocard-body">
+        <div class="timeline">${tl}</div>
+        <div class="oitem">
+          <div class="oitem-name">${o.item?.emoji || '🐟'} ${o.item?.name || 'Item'} — ${o.qty || ''}</div>
+          <div class="oitem-price">₹${o.price || 0}</div>
+        </div>
+        <div class="oinfo">📍 ${o.address || '—'}<br>⏰ ${o.time || '—'}</div>
+        <div class="ocard-actions">${actions[o.status] || ''}</div>
+      </div>
+    </div>`;
+}
+
+function render() {
+  const active = orders.filter(o => o.status !== 'delivered');
+  const done   = orders.filter(o => o.status === 'delivered');
+
+  const aEl = document.getElementById('active-orders');
+  const dEl = document.getElementById('done-orders');
+
+  if (active.length === 0) {
+    aEl.innerHTML = `<div class="empty"><div class="empty-icon">🍳</div><div class="empty-text">No active orders yet.<br>Open the <a href="index.html" target="_blank" style="color:#25D366">customer chat</a> and place a test order!</div></div>`;
+  } else {
+    aEl.innerHTML = active.map(renderCard).join('');
+  }
+
+  dEl.innerHTML = done.length ? done.map(renderCard).join('') : `<div style="color:rgba(255,255,255,.2);font-size:13px;text-align:center;padding:20px">No completed orders yet</div>`;
+}
+
+render();
+</script>
+</body>
+</html>
