@@ -7,689 +7,689 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --wg:#075E54;--wm:#128C7E;--wl:#25D366;--wlg:#DCF8C6;
+  --wbg:#E5DDD5;--wp:#F0F0F0;--wbi:#FFFFFF;--wbo:#DCF8C6;
+  --wt:#111B21;--wmt:#667781;--ws:rgba(0,0,0,0.13);
+  --f:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+}
+html,body{height:100%;font-family:var(--f);background:var(--wbg);display:flex;align-items:center;justify-content:center}
+body::before{content:'';position:fixed;inset:0;background:linear-gradient(135deg,#075E54,#128C7E 40%,#0d4f45);z-index:-1}
 
-  :root {
-    --wa-dark-green: #075E54;
-    --wa-mid-green:  #128C7E;
-    --wa-green:      #25D366;
-    --wa-light-green:#DCF8C6;
-    --wa-bg:         #E5DDD5;
-    --wa-panel:      #F0F0F0;
-    --wa-white:      #FFFFFF;
-    --wa-bubble-in:  #FFFFFF;
-    --wa-bubble-out: #DCF8C6;
-    --wa-text:       #111B21;
-    --wa-meta:       #667781;
-    --wa-divider:    rgba(0,0,0,0.12);
-    --wa-shadow:     rgba(0,0,0,0.13);
-    --radius-msg:    8px;
-    --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  }
+/* Phone frame */
+.frame{width:390px;height:844px;max-height:100vh;background:var(--wbg);display:flex;flex-direction:column;position:relative;box-shadow:0 24px 80px rgba(0,0,0,.35);border-radius:40px;overflow:hidden;border:8px solid #1a1a1a}
+.notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:28px;background:#1a1a1a;border-radius:0 0 18px 18px;z-index:20}
+.demo-badge{position:absolute;top:0;left:50%;transform:translateX(-50%);background:#ff6b35;color:#fff;font-size:9px;font-weight:700;letter-spacing:1px;padding:3px 14px;border-radius:0 0 8px 8px;text-transform:uppercase;z-index:30}
 
-  html, body {
-    height: 100%;
-    font-family: var(--font);
-    background: var(--wa-bg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+/* Status bar */
+.sbar{background:var(--wg);height:28px;display:flex;align-items:center;justify-content:space-between;padding:0 22px 0 28px;flex-shrink:0}
+.sbar .time{font-size:11px;font-weight:600;color:#fff}
+.sicons{display:flex;align-items:center;gap:5px}
 
-  /* ── Phone frame (desktop) ─────────────────────────────────── */
-  .phone-frame {
-    width: 390px;
-    height: 844px;
-    max-height: 100vh;
-    background: var(--wa-bg);
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    box-shadow: 0 24px 80px rgba(0,0,0,0.35), 0 4px 16px rgba(0,0,0,0.2);
-    border-radius: 40px;
-    overflow: hidden;
-    border: 8px solid #1a1a1a;
-  }
+/* Header */
+.hdr{background:var(--wm);padding:8px 16px;display:flex;align-items:center;gap:12px;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.back{color:#fff;background:none;border:none;cursor:pointer;padding:4px;display:flex;align-items:center}
+.avi{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#f97316,#ef4444);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.hinfo{flex:1;min-width:0}
+.hname{font-size:16px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hstatus{font-size:12px;color:rgba(255,255,255,.82);display:flex;align-items:center;gap:4px}
+.odot{width:6px;height:6px;background:var(--wl);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.hacts{display:flex;align-items:center;gap:16px}
+.hacts button{background:none;border:none;cursor:pointer;color:#fff;padding:4px;display:flex}
 
-  /* Status bar */
-  .status-bar {
-    background: var(--wa-dark-green);
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 22px 0 28px;
-    flex-shrink: 0;
-  }
-  .status-bar .time {
-    font-size: 11px;
-    font-weight: 600;
-    color: #fff;
-    letter-spacing: 0.3px;
-  }
-  .status-icons {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  .status-icons svg { display: block; }
+/* Info banner */
+.ibanner{margin:10px 12px 6px;background:rgba(255,255,255,.88);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--wmt);text-align:center;box-shadow:0 1px 2px var(--ws);line-height:1.5;flex-shrink:0}
+.ibanner a{color:var(--wm);text-decoration:none;font-weight:500}
 
-  /* ── Chat header ────────────────────────────────────────────── */
-  .chat-header {
-    background: var(--wa-mid-green);
-    padding: 8px 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-shrink: 0;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  }
-  .back-btn {
-    color: #fff;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    display: flex;
-    align-items: center;
-  }
-  .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-  }
-  .header-info { flex: 1; min-width: 0; }
-  .header-name {
-    font-size: 16px;
-    font-weight: 600;
-    color: #fff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .header-status {
-    font-size: 12px;
-    color: rgba(255,255,255,0.82);
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .online-dot {
-    width: 6px; height: 6px;
-    background: var(--wa-green);
-    border-radius: 50%;
-    animation: pulse 2s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%,100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
-  .header-actions {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    color: #fff;
-  }
-  .header-actions button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #fff;
-    padding: 4px;
-    display: flex;
-  }
+/* Date divider */
+.ddiv{display:flex;align-items:center;justify-content:center;padding:16px 16px 8px}
+.dpill{background:rgba(255,255,255,.85);color:var(--wmt);font-size:11.5px;font-weight:500;padding:4px 12px;border-radius:7px;box-shadow:0 1px 2px rgba(0,0,0,.1)}
 
-  /* ── Date divider ───────────────────────────────────────────── */
-  .date-divider {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px 16px 8px;
-  }
-  .date-pill {
-    background: rgba(255,255,255,0.85);
-    color: var(--wa-meta);
-    font-size: 11.5px;
-    font-weight: 500;
-    padding: 4px 12px;
-    border-radius: 7px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    letter-spacing: 0.2px;
-  }
+/* Messages area */
+.msgs{flex:1;overflow-y:auto;padding:8px 12px 12px;display:flex;flex-direction:column;gap:2px;
+  background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23b0a090' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E")}
+.msgs::-webkit-scrollbar{width:4px}
+.msgs::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:2px}
 
-  /* ── Messages area ──────────────────────────────────────────── */
-  .messages-area {
-    flex: 1;
-    overflow-y: auto;
-    padding: 8px 12px 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23b0a090' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  }
-  .messages-area::-webkit-scrollbar { width: 4px; }
-  .messages-area::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 2px; }
+/* Bubbles */
+.mrow{display:flex;margin-bottom:2px}
+.mrow.out{justify-content:flex-end}
+.mrow.in{justify-content:flex-start}
+.bbl{max-width:82%;padding:6px 10px 4px;border-radius:8px;position:relative;word-break:break-word;line-height:1.45}
+.bbl.in{background:var(--wbi);border-top-left-radius:2px;box-shadow:0 1px 2px var(--ws);color:var(--wt)}
+.bbl.out{background:var(--wbo);border-top-right-radius:2px;box-shadow:0 1px 2px var(--ws);color:var(--wt)}
+.bbl.in::before{content:'';position:absolute;top:0;left:-6px;border:6px solid transparent;border-top-color:var(--wbi);border-right-color:var(--wbi)}
+.bbl.out::before{content:'';position:absolute;top:0;right:-6px;border:6px solid transparent;border-top-color:var(--wbo);border-left-color:var(--wbo)}
+.btxt{font-size:14.5px;color:var(--wt);white-space:pre-wrap}
+.bmeta{display:flex;align-items:center;justify-content:flex-end;gap:4px;margin-top:2px}
+.btime{font-size:11px;color:var(--wmt);white-space:nowrap}
 
-  /* ── Message bubble ─────────────────────────────────────────── */
-  .msg-row {
-    display: flex;
-    margin-bottom: 2px;
-  }
-  .msg-row.out { justify-content: flex-end; }
-  .msg-row.in  { justify-content: flex-start; }
+/* Card bubble (order summary / item) */
+.card-bbl{background:var(--wbi);border-radius:12px;border-top-left-radius:2px;box-shadow:0 1px 4px rgba(0,0,0,.18);overflow:hidden;max-width:85%;margin-bottom:2px}
+.card-hdr{background:var(--wg);color:#fff;padding:10px 14px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
+.card-body{padding:10px 14px}
+.card-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:13.5px;color:var(--wt);border-bottom:1px solid rgba(0,0,0,.07)}
+.card-row:last-child{border:none}
+.card-row.total{font-weight:600;color:var(--wg);font-size:14px}
+.card-meta{font-size:12px;color:var(--wmt);margin-top:6px;line-height:1.6}
+.card-pay-btn{display:block;width:100%;margin-top:12px;padding:11px;background:var(--wm);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--f);transition:background .15s}
+.card-pay-btn:hover{background:var(--wg)}
+.card-bmeta{padding:4px 14px 8px;display:flex;justify-content:flex-end}
 
-  .bubble {
-    max-width: 78%;
-    padding: 6px 10px 4px;
-    border-radius: var(--radius-msg);
-    position: relative;
-    word-break: break-word;
-    line-height: 1.45;
-  }
-  .bubble.in {
-    background: var(--wa-bubble-in);
-    border-top-left-radius: 2px;
-    box-shadow: 0 1px 2px var(--wa-shadow);
-    color: var(--wa-text);
-  }
-  .bubble.out {
-    background: var(--wa-bubble-out);
-    border-top-right-radius: 2px;
-    box-shadow: 0 1px 2px var(--wa-shadow);
-    color: var(--wa-text);
-  }
+/* Typing */
+.tbbl{background:var(--wbi);border-radius:8px;border-top-left-radius:2px;padding:10px 14px;display:inline-flex;align-items:center;gap:4px;box-shadow:0 1px 2px var(--ws)}
+.tbbl .dot{width:7px;height:7px;background:#90A4AE;border-radius:50%;animation:typing 1.2s ease-in-out infinite}
+.tbbl .dot:nth-child(2){animation-delay:.2s}
+.tbbl .dot:nth-child(3){animation-delay:.4s}
+@keyframes typing{0%,80%,100%{transform:translateY(0);opacity:.5}40%{transform:translateY(-6px);opacity:1}}
 
-  /* Tail on bubble */
-  .bubble.in::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -6px;
-    border: 6px solid transparent;
-    border-top-color: var(--wa-bubble-in);
-    border-right-color: var(--wa-bubble-in);
-  }
-  .bubble.out::before {
-    content: '';
-    position: absolute;
-    top: 0; right: -6px;
-    border: 6px solid transparent;
-    border-top-color: var(--wa-bubble-out);
-    border-left-color: var(--wa-bubble-out);
-  }
+/* Quick replies */
+.qr{padding:8px 12px 4px;display:flex;flex-wrap:wrap;gap:6px;background:transparent;flex-shrink:0;min-height:42px;align-items:center}
+.qbtn{background:rgba(255,255,255,.95);border:1.5px solid var(--wm);color:var(--wm);font-size:12px;font-weight:500;font-family:var(--f);padding:5px 12px;border-radius:16px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.qbtn:hover,.qbtn:active{background:var(--wm);color:#fff}
+.qbtn.order{border-color:#25a244;color:#25a244;font-weight:600}
+.qbtn.order:hover{background:#25a244;color:#fff}
 
-  .bubble-text {
-    font-size: 14.5px;
-    color: var(--wa-text);
-    white-space: pre-wrap;
-  }
+/* Input */
+.ibar{background:var(--wp);padding:8px 10px;display:flex;align-items:flex-end;gap:8px;flex-shrink:0;border-top:1px solid rgba(0,0,0,.12)}
+.ibtn{background:none;border:none;color:var(--wmt);cursor:pointer;padding:6px;display:flex;flex-shrink:0;transition:color .15s}
+.iwrap{flex:1;background:#fff;border-radius:22px;display:flex;align-items:flex-end;padding:8px 14px;box-shadow:0 1px 2px rgba(0,0,0,.1);min-height:42px;max-height:110px}
+#chat-input{flex:1;border:none;outline:none;font-family:var(--f);font-size:15px;color:var(--wt);background:transparent;resize:none;line-height:1.4;max-height:90px;overflow-y:auto}
+#chat-input::placeholder{color:#aaa}
+.sbtn{width:46px;height:46px;border-radius:50%;background:var(--wm);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 6px rgba(18,140,126,.45);transition:background .15s,transform .1s}
+.sbtn:hover{background:var(--wg)}
+.sbtn:active{transform:scale(.93)}
 
-  .bubble-meta {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 4px;
-    margin-top: 2px;
-  }
-  .bubble-time {
-    font-size: 11px;
-    color: var(--wa-meta);
-    white-space: nowrap;
-  }
-  .tick { display: flex; }
+/* ── RAZORPAY MODAL ────────────────────────────────────────────── */
+.rz-overlay{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;z-index:200;backdrop-filter:blur(2px)}
+.rz-sheet{background:#fff;width:100%;border-radius:20px 20px 0 0;padding:0;animation:slideUp .28s ease;overflow:hidden;max-height:90%}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 
-  /* ── Typing indicator ───────────────────────────────────────── */
-  .typing-bubble {
-    background: var(--wa-bubble-in);
-    border-radius: var(--radius-msg);
-    border-top-left-radius: 2px;
-    padding: 10px 14px;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    box-shadow: 0 1px 2px var(--wa-shadow);
-  }
-  .typing-bubble .dot {
-    width: 7px; height: 7px;
-    background: #90A4AE;
-    border-radius: 50%;
-    animation: typing 1.2s ease-in-out infinite;
-  }
-  .typing-bubble .dot:nth-child(2) { animation-delay: 0.2s; }
-  .typing-bubble .dot:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes typing {
-    0%,80%,100% { transform: translateY(0); opacity: 0.5; }
-    40%          { transform: translateY(-6px); opacity: 1; }
-  }
+.rz-header{background:#072654;padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
+.rz-logo{color:#fff;font-size:17px;font-weight:700;letter-spacing:.5px}
+.rz-logo span{color:#3395FF}
+.rz-close{background:rgba(255,255,255,.15);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
+.rz-merch{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid #eee;background:#f8f8f8}
+.rz-micon{width:42px;height:42px;background:var(--wg);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.rz-mname{font-size:13px;color:#666;margin-bottom:2px}
+.rz-mamt{font-size:22px;font-weight:700;color:#111}
+.rz-tabs{display:flex;border-bottom:2px solid #eee;padding:0 18px}
+.rz-tab{padding:10px 14px;font-size:13px;color:#888;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;font-family:var(--f)}
+.rz-tab.active{color:#072654;border-bottom-color:#072654;font-weight:600}
+.rz-content{padding:18px}
+.rz-lbl{font-size:12px;color:#666;margin-bottom:6px;font-weight:500}
+.rz-inp{width:100%;border:1.5px solid #ddd;border-radius:6px;padding:10px 12px;font-size:14px;font-family:var(--f);outline:none;transition:border .15s}
+.rz-inp:focus{border-color:#072654}
+.rz-or{text-align:center;color:#aaa;font-size:12px;margin:12px 0;position:relative}
+.rz-or::before,.rz-or::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:#eee}
+.rz-or::before{left:0}
+.rz-or::after{right:0}
+.rz-qr-box{border:1.5px dashed #ddd;border-radius:8px;padding:16px;text-align:center;color:#aaa;font-size:13px}
+.rz-paybtn{display:block;width:100%;padding:13px;background:#072654;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--f);margin-top:16px;transition:background .15s}
+.rz-paybtn:hover{background:#0a3a7a}
+.rz-footer{text-align:center;font-size:11px;color:#aaa;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:4px}
 
-  /* ── Quick replies ──────────────────────────────────────────── */
-  .quick-replies {
-    padding: 8px 12px 4px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    background: transparent;
-  }
-  .quick-btn {
-    background: rgba(255,255,255,0.95);
-    border: 1.5px solid var(--wa-mid-green);
-    color: var(--wa-mid-green);
-    font-size: 12.5px;
-    font-weight: 500;
-    font-family: var(--font);
-    padding: 5px 12px;
-    border-radius: 16px;
-    cursor: pointer;
-    transition: all 0.15s;
-    white-space: nowrap;
-  }
-  .quick-btn:hover, .quick-btn:active {
-    background: var(--wa-mid-green);
-    color: #fff;
-  }
+/* Success view */
+.rz-success{padding:30px 20px;text-align:center}
+.rz-scheck{font-size:56px;animation:popIn .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{transform:scale(0)}to{transform:scale(1)}}
+.rz-stitle{font-size:20px;font-weight:700;color:#1a1a1a;margin:12px 0 4px}
+.rz-samt{font-size:28px;font-weight:700;color:#25a244;margin:4px 0}
+.rz-smerch{font-size:13px;color:#888;margin-bottom:16px}
+.rz-txn{font-size:11px;color:#aaa;background:#f5f5f5;padding:8px 14px;border-radius:6px;margin-bottom:20px;font-family:monospace}
+.rz-donebtn{display:block;width:100%;padding:13px;background:#25a244;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--f);transition:background .15s}
+.rz-donebtn:hover{background:#1d8736}
 
-  /* ── Input bar ──────────────────────────────────────────────── */
-  .input-bar {
-    background: var(--wa-panel);
-    padding: 8px 10px;
-    display: flex;
-    align-items: flex-end;
-    gap: 8px;
-    flex-shrink: 0;
-    border-top: 1px solid var(--wa-divider);
-  }
-  .attach-btn, .emoji-btn {
-    background: none;
-    border: none;
-    color: var(--wa-meta);
-    cursor: pointer;
-    padding: 6px;
-    display: flex;
-    flex-shrink: 0;
-    transition: color 0.15s;
-  }
-  .attach-btn:hover, .emoji-btn:hover { color: var(--wa-dark-green); }
+/* Admin link */
+.admin-link{text-align:center;padding:6px 12px;font-size:11px;color:var(--wmt);flex-shrink:0}
+.admin-link a{color:var(--wm);text-decoration:none;font-weight:500}
 
-  .input-wrap {
-    flex: 1;
-    background: #fff;
-    border-radius: 22px;
-    display: flex;
-    align-items: flex-end;
-    padding: 8px 14px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    min-height: 42px;
-    max-height: 110px;
-  }
-  #chat-input {
-    flex: 1;
-    border: none;
-    outline: none;
-    font-family: var(--font);
-    font-size: 15px;
-    color: var(--wa-text);
-    background: transparent;
-    resize: none;
-    line-height: 1.4;
-    max-height: 90px;
-    overflow-y: auto;
-  }
-  #chat-input::placeholder { color: #aaa; }
-
-  .send-btn {
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background: var(--wa-mid-green);
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    box-shadow: 0 2px 6px rgba(18,140,126,0.45);
-    transition: background 0.15s, transform 0.1s;
-  }
-  .send-btn:hover { background: var(--wa-dark-green); }
-  .send-btn:active { transform: scale(0.93); }
-
-  /* ── Info banner (first visit) ──────────────────────────────── */
-  .info-banner {
-    margin: 10px 12px 6px;
-    background: rgba(255,255,255,0.88);
-    border-radius: 8px;
-    padding: 8px 12px;
-    font-size: 12px;
-    color: var(--wa-meta);
-    text-align: center;
-    box-shadow: 0 1px 2px var(--wa-shadow);
-    line-height: 1.5;
-    flex-shrink: 0;
-  }
-  .info-banner a { color: var(--wa-mid-green); text-decoration: none; font-weight: 500; }
-
-  /* ── Demo badge ─────────────────────────────────────────────── */
-  .demo-badge {
-    position: absolute;
-    top: -1px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #ff6b35;
-    color: #fff;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    padding: 3px 14px;
-    border-radius: 0 0 8px 8px;
-    text-transform: uppercase;
-    z-index: 10;
-  }
-
-  /* ── Notch ──────────────────────────────────────────────────── */
-  .notch {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 120px;
-    height: 28px;
-    background: #1a1a1a;
-    border-radius: 0 0 18px 18px;
-    z-index: 20;
-  }
-
-  /* ── Desktop background ─────────────────────────────────────── */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: linear-gradient(135deg, #075E54 0%, #128C7E 40%, #1a7a5e 70%, #0d4f45 100%);
-    z-index: -1;
-  }
-
-  /* ── Mobile: full screen ────────────────────────────────────── */
-  @media (max-width: 480px) {
-    body { display: block; background: var(--wa-bg); }
-    body::before { display: none; }
-    .phone-frame {
-      width: 100%;
-      height: 100vh;
-      height: 100dvh;
-      border-radius: 0;
-      border: none;
-      box-shadow: none;
-    }
-    .notch { display: none; }
-    .demo-badge { top: 0; }
-  }
+@media(max-width:480px){
+  body{display:block;background:var(--wbg)}
+  body::before{display:none}
+  .frame{width:100%;height:100vh;height:100dvh;border-radius:0;border:none;box-shadow:none}
+  .notch{display:none}
+  .demo-badge{top:0}
+}
 </style>
 </head>
 <body>
-
-<div class="phone-frame" id="app">
+<div class="frame" id="app">
   <div class="notch"></div>
   <div class="demo-badge">Demo</div>
 
   <!-- Status bar -->
-  <div class="status-bar">
-    <span class="time" id="status-time">9:41</span>
-    <div class="status-icons">
-      <svg width="16" height="12" viewBox="0 0 16 12" fill="white">
-        <rect x="0" y="3" width="3" height="9" rx="1"/>
-        <rect x="4.5" y="2" width="3" height="10" rx="1"/>
-        <rect x="9" y="0" width="3" height="12" rx="1"/>
-        <rect x="13.5" y="1" width="2.5" height="11" rx="1" opacity="0.35"/>
-      </svg>
-      <svg width="15" height="12" viewBox="0 0 15 12" fill="white">
-        <path d="M7.5 2C9.8 2 11.9 3 13.4 4.6L14.8 3.2C12.9 1.2 10.3 0 7.5 0S2.1 1.2.2 3.2l1.4 1.4C3.1 3 5.2 2 7.5 2z" opacity="0.4"/>
-        <path d="M7.5 5c1.5 0 2.9.6 3.9 1.6L12.8 5.2C11.4 3.8 9.6 3 7.5 3S3.6 3.8 2.2 5.2l1.4 1.4C4.6 5.6 6 5 7.5 5z" opacity="0.7"/>
-        <circle cx="7.5" cy="10" r="2"/>
-      </svg>
-      <svg width="25" height="12" viewBox="0 0 25 12" fill="white">
-        <rect x="0" y="1" width="21" height="10" rx="3" fill="none" stroke="white" stroke-width="1.2"/>
-        <rect x="22" y="4" width="3" height="4" rx="1.5" fill="white" opacity="0.5"/>
-        <rect x="1.5" y="2.5" width="16" height="7" rx="1.5" fill="white"/>
-      </svg>
+  <div class="sbar">
+    <span class="time" id="st">9:41</span>
+    <div class="sicons">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13.5" y="1" width="2.5" height="11" rx="1" opacity=".35"/></svg>
+      <svg width="15" height="12" viewBox="0 0 15 12" fill="white"><path d="M7.5 2C9.8 2 11.9 3 13.4 4.6L14.8 3.2C12.9 1.2 10.3 0 7.5 0S2.1 1.2.2 3.2l1.4 1.4C3.1 3 5.2 2 7.5 2z" opacity=".4"/><path d="M7.5 5c1.5 0 2.9.6 3.9 1.6L12.8 5.2C11.4 3.8 9.6 3 7.5 3S3.6 3.8 2.2 5.2l1.4 1.4C4.6 5.6 6 5 7.5 5z" opacity=".7"/><circle cx="7.5" cy="10" r="2"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="white"><rect x="0" y="1" width="21" height="10" rx="3" fill="none" stroke="white" stroke-width="1.2"/><rect x="22" y="4" width="3" height="4" rx="1.5" fill="white" opacity=".5"/><rect x="1.5" y="2.5" width="16" height="7" rx="1.5" fill="white"/></svg>
     </div>
   </div>
 
-  <!-- Chat header -->
-  <div class="chat-header">
-    <button class="back-btn" aria-label="Back">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M20 12H4M4 12l8-8M4 12l8 8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
-    <div class="avatar">🐟</div>
-    <div class="header-info">
-      <div class="header-name">Minutes Delivery</div>
-      <div class="header-status">
-        <div class="online-dot"></div>
-        <span>online</span>
-      </div>
+  <!-- Header -->
+  <div class="hdr">
+    <button class="back" aria-label="Back"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20 12H4M4 12l8-8M4 12l8 8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <div class="avi">🐟</div>
+    <div class="hinfo">
+      <div class="hname">Minutes Delivery</div>
+      <div class="hstatus"><div class="odot"></div><span>online</span></div>
     </div>
-    <div class="header-actions">
-      <button aria-label="Video call">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <path d="M15 10l4.553-2.669A1 1 0 0121 8.232v7.536a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-      <button aria-label="Call">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <path d="M3 5.5C3 14.06 9.94 21 18.5 21c.386 0 .77-.014 1.148-.042.435-.032.854-.14 1.236-.315a2.98 2.98 0 001.37-1.22 3.02 3.02 0 00.376-1.41v-2.83a3 3 0 00-2.167-2.884l-2.717-.679a3 3 0 00-2.834.8l-.64.638a.75.75 0 01-.854.152 13.47 13.47 0 01-6.078-6.077.75.75 0 01.152-.855l.637-.639a3 3 0 00.8-2.834l-.679-2.716A3 3 0 007.665 3H4.838a3.02 3.02 0 00-1.41.376 2.98 2.98 0 00-1.22 1.37A4.12 4.12 0 003 5.5z" stroke="white" stroke-width="1.7"/>
-        </svg>
-      </button>
-      <button aria-label="More">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
-          <circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/>
-        </svg>
-      </button>
+    <div class="hacts">
+      <button><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M15 10l4.553-2.669A1 1 0 0121 8.232v7.536a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 5.5C3 14.06 9.94 21 18.5 21c.386 0 .77-.014 1.148-.042.435-.032.854-.14 1.236-.315a2.98 2.98 0 001.37-1.22 3.02 3.02 0 00.376-1.41v-2.83a3 3 0 00-2.167-2.884l-2.717-.679a3 3 0 00-2.834.8l-.64.638a.75.75 0 01-.854.152 13.47 13.47 0 01-6.078-6.077.75.75 0 01.152-.855l.637-.639a3 3 0 00.8-2.834l-.679-2.716A3 3 0 007.665 3H4.838a3.02 3.02 0 00-1.41.376 2.98 2.98 0 00-1.22 1.37A4.12 4.12 0 003 5.5z" stroke="white" stroke-width="1.7"/></svg></button>
+      <button><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg></button>
     </div>
   </div>
 
   <!-- Info banner -->
-  <div class="info-banner">
-    🔒 This is a chatbot demo for <strong>Minutes Delivery</strong>.<br/>
-    To place orders, WhatsApp us: <a href="https://wa.me/919363737641" target="_blank">+91 93637 37641</a>
-  </div>
+  <div class="ibanner">🔒 Demo for <strong>Minutes Delivery</strong> — Real orders: <a href="https://wa.me/919363737641" target="_blank">+91 93637 37641</a></div>
 
   <!-- Messages -->
-  <div class="messages-area" id="messages">
-    <div class="date-divider">
-      <span class="date-pill" id="date-pill">Today</span>
-    </div>
+  <div class="msgs" id="msgs">
+    <div class="ddiv"><span class="dpill" id="dpill">Today</span></div>
   </div>
 
   <!-- Quick replies -->
-  <div class="quick-replies" id="quick-replies">
-    <button class="quick-btn" onclick="sendQuick('Show full menu 🐟')">Show Menu</button>
-    <button class="quick-btn" onclick="sendQuick('What are your sea fish prices?')">Sea Fish 🌊</button>
-    <button class="quick-btn" onclick="sendQuick('Chicken prices please 🍗')">Chicken 🍗</button>
-    <button class="quick-btn" onclick="sendQuick('How do I place an order?')">How to Order</button>
-    <button class="quick-btn" onclick="sendQuick('Vanjaram price per kg?')">Vanjaram</button>
-    <button class="quick-btn" onclick="sendQuick('Do you deliver today?')">Delivery Info</button>
-  </div>
+  <div class="qr" id="qr"></div>
 
   <!-- Input -->
-  <div class="input-bar">
-    <button class="emoji-btn" aria-label="Emoji">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="12" r="9" stroke="#aaa" stroke-width="1.8"/>
-        <path d="M8.5 14s1 1.5 3.5 1.5 3.5-1.5 3.5-1.5" stroke="#aaa" stroke-width="1.8" stroke-linecap="round"/>
-        <circle cx="9" cy="10.5" r="1" fill="#aaa"/>
-        <circle cx="15" cy="10.5" r="1" fill="#aaa"/>
-      </svg>
-    </button>
-    <div class="input-wrap">
-      <textarea id="chat-input" rows="1" placeholder="Message" maxlength="500"
-        onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+  <div class="ibar">
+    <button class="ibtn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#aaa" stroke-width="1.8"/><path d="M8.5 14s1 1.5 3.5 1.5 3.5-1.5 3.5-1.5" stroke="#aaa" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="10.5" r="1" fill="#aaa"/><circle cx="15" cy="10.5" r="1" fill="#aaa"/></svg></button>
+    <div class="iwrap"><textarea id="chat-input" rows="1" placeholder="Message" maxlength="500" onkeydown="handleKey(event)" oninput="resize(this)"></textarea></div>
+    <button class="ibtn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" stroke="#aaa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button class="sbtn" onclick="sendMsg()" aria-label="Send"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+
+  <!-- Admin link -->
+  <div class="admin-link">Kitchen view: <a href="admin.html" target="_blank">Open Admin Panel →</a></div>
+
+  <!-- Razorpay Modal -->
+  <div class="rz-overlay" id="rz-overlay" style="display:none">
+    <div class="rz-sheet">
+      <!-- Payment view -->
+      <div id="rz-pay-view">
+        <div class="rz-header">
+          <div class="rz-logo">razor<span>pay</span></div>
+          <button class="rz-close" onclick="closePayment()">✕</button>
+        </div>
+        <div class="rz-merch">
+          <div class="rz-micon">🐟</div>
+          <div>
+            <div class="rz-mname">Minutes Delivery</div>
+            <div class="rz-mamt">₹<span id="rz-amt">0</span></div>
+          </div>
+        </div>
+        <div class="rz-tabs">
+          <div class="rz-tab active">UPI</div>
+          <div class="rz-tab">Cards</div>
+          <div class="rz-tab">Net Banking</div>
+        </div>
+        <div class="rz-content">
+          <div class="rz-lbl">UPI ID</div>
+          <input class="rz-inp" id="rz-upi" value="customer@paytm" placeholder="yourname@upi"/>
+          <div class="rz-or">OR</div>
+          <div class="rz-qr-box">📱 Scan QR Code (Demo)</div>
+          <button class="rz-paybtn" onclick="processPayment()">🔒 Pay ₹<span id="rz-pay-amt">0</span></button>
+          <div class="rz-footer"><svg width="14" height="14" viewBox="0 0 24 24" fill="#aaa"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Secured by Razorpay</div>
+        </div>
+      </div>
+      <!-- Success view -->
+      <div id="rz-ok-view" style="display:none">
+        <div class="rz-success">
+          <div class="rz-scheck">✅</div>
+          <div class="rz-stitle">Payment Successful!</div>
+          <div class="rz-samt">₹<span id="rz-ok-amt">0</span></div>
+          <div class="rz-smerch">Paid to Minutes Delivery</div>
+          <div class="rz-txn">Transaction ID: pay_DEMO<span id="rz-txn">000000</span></div>
+          <button class="rz-donebtn" onclick="confirmOrder()">🎉 Back to Chat</button>
+        </div>
+      </div>
     </div>
-    <button class="attach-btn" aria-label="Attach" id="attach-btn">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" stroke="#aaa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
-    <button class="send-btn" onclick="sendMessage()" aria-label="Send">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
   </div>
 </div>
 
 <script>
-  const messagesEl = document.getElementById('messages');
-  const inputEl    = document.getElementById('chat-input');
-  let chatHistory  = [];
-  let isTyping     = false;
+// ══════════════════════════════════════════════════════════════
+// ITEM MAP
+// ══════════════════════════════════════════════════════════════
+const ITEMS = {
+  parai:        {name:'Parai Fish',               emoji:'🐟', cat:'dam',     pkg:210},
+  jilappi:      {name:'Jilappi Fish',             emoji:'🐟', cat:'dam',     pkg:180},
+  'dam seela':  {name:'Dam Seela Fish',           emoji:'🐟', cat:'dam',     pkg:180},
+  catla:        {name:'Catla Fish',               emoji:'🐟', cat:'dam',     pkg:200},
+  vanjaram:     {name:'Vanjaram Fish',            emoji:'🌊', cat:'sea',     pkg:1200},
+  nagara:       {name:'Nagara Fish',              emoji:'🌊', cat:'sea',     pkg:550},
+  mavula:       {name:'Mavula / Ooli Fish',       emoji:'🌊', cat:'sea',     pkg:550},
+  ooli:         {name:'Mavula / Ooli Fish',       emoji:'🌊', cat:'sea',     pkg:550},
+  matthi:       {name:'Kerala Matthi Fish',       emoji:'🌊', cat:'sea',     pkg:200},
+  manapattu:    {name:'Manapattu Salai Fish',     emoji:'🌊', cat:'sea',     pkg:220},
+  nandu:        {name:'Big Blue Nandu (Crab)',    emoji:'🦀', cat:'sea',     pkg:650},
+  eral:         {name:'Big Size Eral (Prawn)',    emoji:'🦐', cat:'sea',     pkg:550},
+  aila:         {name:'Aila Fish',               emoji:'🌊', cat:'sea',     pkg:350},
+  breast:       {name:'Chicken Breast Boneless',  emoji:'🍗', cat:'chicken', pkg:400, p500:210},
+  currycut:     {name:'Currycut / Biryani Cut',  emoji:'🍗', cat:'chicken', pkg:360, p500:190},
+  drumstick:    {name:'Chicken Drumstick',       emoji:'🍗', cat:'chicken', pkg:355, p500:180},
+  'leg boneless':{name:'Chicken Leg Boneless',   emoji:'🍗', cat:'chicken', pkg:330, p500:170},
+  liver:        {name:'Chicken Liver',           emoji:'🍗', cat:'chicken', pkg:130, p500:70},
+  lollipop:     {name:'Chicken Lollipop',        emoji:'🍗', cat:'chicken', pkg:350, p500:180},
+  chicken:      {name:'Whole Chicken',           emoji:'🍗', cat:'chicken', pkg:260, p500:140},
+};
 
-  // ── Time helpers ──────────────────────────────────────────────
-  function nowTime() {
-    return new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+const RECS = {
+  dam:     '💡 *Tip:* 500gm is great for 2 people. For a family of 4, go for 1kg.',
+  sea:     '💡 *Tip:* 250gm is ideal for 1 person. 500gm serves 2-3 people nicely.',
+  chicken: '💡 *Tip:* 250gm serves 1-2 as a snack. 500gm is a perfect meal for 3-4 people.',
+};
+
+const TIME_SLOTS = ['ASAP 🚀','Today 5 PM','Today 6 PM','Today 7 PM','Today 8 PM','Tomorrow 9 AM'];
+
+function calcPrice(item, grams) {
+  if (grams === 500 && item.p500) return item.p500;
+  return Math.round(item.pkg / 1000 * grams);
+}
+
+// ══════════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════════
+let phase = 'idle'; // idle|qty|address|time|summary|payment|paid
+let order = {};
+let hist  = [];
+let busy  = false;
+let typRow = null;
+
+// ══════════════════════════════════════════════════════════════
+// BROADCAST CHANNEL  (cross-tab admin ↔ customer)
+// ══════════════════════════════════════════════════════════════
+let ch;
+try { ch = new BroadcastChannel('md-demo'); } catch(e) { ch = null; }
+if (ch) {
+  ch.onmessage = e => {
+    if (e.data.type === 'STATUS') onStatusUpdate(e.data);
+  };
+}
+
+const STATUS_MSGS = {
+  preparing:        '👨‍🍳 Great news! Your order is now being freshly prepared. Ready in ~20 minutes!',
+  ready:            '✅ Your order is packed and ready! Our delivery partner is picking it up now 🛵',
+  out_for_delivery: '🛵 Your order is on its way! Estimated arrival: 15-20 minutes. Please be available 📍',
+  delivered:        '🎉 Your order has been delivered! Enjoy your fresh meal! 😊\n\nThank you for choosing Minutes Delivery ❤️\n\nRate your experience: ⭐⭐⭐⭐⭐',
+};
+
+function onStatusUpdate(data) {
+  const msg = STATUS_MSGS[data.status];
+  if (msg) setTimeout(() => { addBubble(msg,'in'); scroll(); }, 600);
+}
+
+// ══════════════════════════════════════════════════════════════
+// DOM HELPERS
+// ══════════════════════════════════════════════════════════════
+const msgsEl = document.getElementById('msgs');
+const qrEl   = document.getElementById('qr');
+const inEl   = document.getElementById('chat-input');
+
+function nowTime() {
+  return new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
+}
+
+function addBubble(text, dir) {
+  const row = document.createElement('div');
+  row.className = 'mrow ' + dir;
+  const b = document.createElement('div');
+  b.className = 'bbl ' + dir;
+  const t = document.createElement('div');
+  t.className = 'btxt';
+  t.textContent = text;
+  const m = document.createElement('div');
+  m.className = 'bmeta';
+  m.innerHTML = `<span class="btime">${nowTime()}</span>` + (dir==='out'?`<span style="display:flex"><svg width="16" height="11" viewBox="0 0 16 11" fill="none"><path d="M1 5.5l3.5 3.5L10 2" stroke="#53BDEB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 5.5l3.5 3.5L15 2" stroke="#53BDEB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`:'');
+  b.appendChild(t);
+  b.appendChild(m);
+  row.appendChild(b);
+  msgsEl.appendChild(row);
+  scroll();
+  return b;
+}
+
+function addCardBubble(html) {
+  const wrap = document.createElement('div');
+  wrap.className = 'mrow in';
+  const card = document.createElement('div');
+  card.className = 'card-bbl';
+  card.innerHTML = html;
+  wrap.appendChild(card);
+  msgsEl.appendChild(wrap);
+  scroll();
+}
+
+function showTyping() {
+  if (typRow) return;
+  typRow = document.createElement('div');
+  typRow.className = 'mrow in';
+  typRow.innerHTML = `<div class="tbbl"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+  msgsEl.appendChild(typRow);
+  scroll();
+}
+function hideTyping() { if (typRow) { typRow.remove(); typRow = null; } }
+
+function scroll() { msgsEl.scrollTop = msgsEl.scrollHeight; }
+
+function setQR(buttons) {
+  qrEl.innerHTML = '';
+  buttons.forEach(b => {
+    const btn = document.createElement('button');
+    btn.className = 'qbtn' + (b.cls?' '+b.cls:'');
+    btn.textContent = b.label;
+    btn.onclick = b.fn;
+    qrEl.appendChild(btn);
+  });
+}
+
+function defaultQR() {
+  setQR([
+    {label:'📋 Full Menu',  fn:()=>quickSend('Show full menu')},
+    {label:'🐟 Dam Fish',   fn:()=>quickSend('Show dam fish prices')},
+    {label:'🌊 Sea Fish',   fn:()=>quickSend('Show sea fish prices')},
+    {label:'🍗 Chicken',    fn:()=>quickSend('Show chicken prices')},
+    {label:'🛒 Order Now',  fn:()=>quickSend('I want to place an order'), cls:'order'},
+    {label:'❓ How to Order',fn:()=>quickSend('How do I place an order?')},
+  ]);
+}
+
+function resize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 90) + 'px';
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
+}
+
+// ══════════════════════════════════════════════════════════════
+// ITEM DETECTION
+// ══════════════════════════════════════════════════════════════
+function detectItem(text) {
+  const lo = text.toLowerCase();
+  for (const [key, item] of Object.entries(ITEMS)) {
+    if (lo.includes(key)) return item;
   }
-  function updateStatusTime() {
-    const t = new Date();
-    document.getElementById('status-time').textContent =
-      t.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false });
+  return null;
+}
+
+function hasOrderIntent(text) {
+  const lo = text.toLowerCase();
+  return ['order','want','buy','get me','place','book','take'].some(w => lo.includes(w));
+}
+
+// ══════════════════════════════════════════════════════════════
+// FSM — ORDER FLOW
+// ══════════════════════════════════════════════════════════════
+
+function startOrder(itemKey) {
+  const item = ITEMS[itemKey];
+  if (!item) return showCategoryMenu();
+  addBubble('I want to order ' + item.name, 'out');
+  showItemCard(item);
+}
+
+function showCategoryMenu() {
+  addBubble('What would you like to order? Choose a category:', 'in');
+  setQR([
+    {label:'🐟 Dam Fish',   fn:()=>showCategoryItems('dam')},
+    {label:'🌊 Sea Fish',   fn:()=>showCategoryItems('sea')},
+    {label:'🍗 Chicken',    fn:()=>showCategoryItems('chicken')},
+    {label:'⬅️ Back',       fn:()=>{ phase='idle'; defaultQR(); }},
+  ]);
+}
+
+function showCategoryItems(cat) {
+  const entries = Object.entries(ITEMS).filter(([,v]) => v.cat === cat);
+  const catNames = {dam:'🐟 Dam Fish', sea:'🌊 Sea Fish', chicken:'🍗 Chicken'};
+  addBubble(catNames[cat] + ' — tap an item to order:', 'in');
+  const btns = entries.map(([key, item]) => ({
+    label: item.emoji + ' ' + item.name + ' (₹' + item.pkg + '/kg)',
+    fn: () => { addBubble('I want ' + item.name, 'out'); showItemCard(item); }
+  }));
+  btns.push({label:'⬅️ Back', fn: showCategoryMenu});
+  setQR(btns);
+}
+
+function showItemCard(item) {
+  phase = 'qty';
+  order.item = item;
+  const qtys = [250, 500, 750, 1000];
+  const rec = RECS[item.cat];
+  const qtyLines = qtys.map(g => {
+    const p = calcPrice(item, g);
+    const lbl = g === 1000 ? '1kg' : g + 'gm';
+    return lbl + ' — ₹' + p;
+  });
+  setTimeout(() => {
+    addBubble(item.emoji + ' *' + item.name + '*\nPrice: ₹' + item.pkg + '/kg\n\n' + rec + '\n\n*Select quantity:*', 'in');
+    setQR([
+      ...qtys.map((g,i) => ({
+        label: qtyLines[i],
+        cls: 'order',
+        fn: () => selectQty(g === 1000 ? '1kg' : g + 'gm', calcPrice(item, g))
+      })),
+      {label:'⬅️ Back', fn:()=>{ phase='idle'; showCategoryMenu(); }}
+    ]);
+  }, 300);
+}
+
+function selectQty(qtyLabel, price) {
+  order.qty   = qtyLabel;
+  order.price = price;
+  phase = 'address';
+  addBubble(qtyLabel + ' (₹' + price + ')', 'out');
+  setQR([]);
+  setTimeout(() => {
+    addBubble('✅ *' + order.item.name + '* ' + qtyLabel + ' added!\n\n📍 Please type your *delivery address* below:', 'in');
+    inEl.placeholder = 'e.g. 12/4 Anna Nagar, Coimbatore';
+    inEl.focus();
+  }, 350);
+}
+
+function handleAddress(addr) {
+  if (addr.length < 8) {
+    addBubble('Please enter a more complete address (street, area, city) 📍', 'in');
+    return;
   }
-  updateStatusTime();
-  setInterval(updateStatusTime, 30000);
+  order.address = addr;
+  phase = 'time';
+  inEl.placeholder = 'Message';
+  setTimeout(() => {
+    addBubble('Got it! 📍 *' + addr + '*\n\n⏰ When would you like the delivery?', 'in');
+    setQR(TIME_SLOTS.map(ts => ({
+      label: ts,
+      cls: 'order',
+      fn: () => selectTime(ts)
+    })));
+  }, 350);
+}
 
-  // ── Render a message bubble ───────────────────────────────────
-  function appendMessage(text, direction) {
-    const row = document.createElement('div');
-    row.className = `msg-row ${direction}`;
+function selectTime(ts) {
+  order.time = ts;
+  phase = 'summary';
+  addBubble(ts, 'out');
+  setQR([]);
+  setTimeout(() => showSummary(), 400);
+}
 
-    const bubble = document.createElement('div');
-    bubble.className = `bubble ${direction}`;
+function handleTimeText(text) {
+  order.time = text;
+  phase = 'summary';
+  setTimeout(() => showSummary(), 350);
+}
 
-    const textEl = document.createElement('div');
-    textEl.className = 'bubble-text';
-    textEl.textContent = text;
+function showSummary() {
+  order.id = 'MD' + Date.now().toString().slice(-6);
+  const html = `
+    <div class="card-hdr">📋 Order Summary — #${order.id}</div>
+    <div class="card-body">
+      <div class="card-row"><span>${order.item.emoji} ${order.item.name} ${order.qty}</span><span>₹${order.price}</span></div>
+      <div class="card-row total"><span>💰 Total</span><span>₹${order.price}</span></div>
+      <div class="card-meta">📍 ${order.address}<br>⏰ ${order.time}</div>
+      <button class="card-pay-btn" onclick="openPayment()">💳 Proceed to Payment</button>
+    </div>
+    <div class="card-bmeta"><span class="btime">${nowTime()}</span></div>`;
+  addCardBubble(html);
+}
 
-    const meta = document.createElement('div');
-    meta.className = 'bubble-meta';
+// ══════════════════════════════════════════════════════════════
+// RAZORPAY MOCK
+// ══════════════════════════════════════════════════════════════
+function openPayment() {
+  document.getElementById('rz-amt').textContent = order.price;
+  document.getElementById('rz-pay-amt').textContent = order.price;
+  document.getElementById('rz-pay-view').style.display = 'block';
+  document.getElementById('rz-ok-view').style.display  = 'none';
+  document.getElementById('rz-overlay').style.display  = 'flex';
+  phase = 'payment';
+}
 
-    const time = document.createElement('span');
-    time.className = 'bubble-time';
-    time.textContent = nowTime();
-    meta.appendChild(time);
+function closePayment() {
+  document.getElementById('rz-overlay').style.display = 'none';
+  phase = 'summary';
+}
 
-    if (direction === 'out') {
-      meta.insertAdjacentHTML('beforeend', `
-        <span class="tick">
-          <svg width="16" height="11" viewBox="0 0 16 11" fill="none">
-            <path d="M1 5.5l3.5 3.5L10 2" stroke="#53BDEB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M6 5.5l3.5 3.5L15 2" stroke="#53BDEB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </span>`);
-    }
+function processPayment() {
+  const txn = Math.random().toString(36).slice(2,10).toUpperCase();
+  document.getElementById('rz-ok-amt').textContent  = order.price;
+  document.getElementById('rz-txn').textContent     = txn;
+  document.getElementById('rz-pay-view').style.display = 'none';
+  document.getElementById('rz-ok-view').style.display  = 'block';
+}
 
-    bubble.appendChild(textEl);
-    bubble.appendChild(meta);
-    row.appendChild(bubble);
-    messagesEl.appendChild(row);
-    scrollToBottom();
-    return bubble;
-  }
+function confirmOrder() {
+  document.getElementById('rz-overlay').style.display = 'none';
+  phase = 'paid';
 
-  // ── Typing indicator ──────────────────────────────────────────
-  let typingRow = null;
-  function showTyping() {
-    if (typingRow) return;
-    typingRow = document.createElement('div');
-    typingRow.className = 'msg-row in';
-    typingRow.innerHTML = `
-      <div class="typing-bubble">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-      </div>`;
-    messagesEl.appendChild(typingRow);
-    scrollToBottom();
-  }
-  function hideTyping() {
-    if (typingRow) { typingRow.remove(); typingRow = null; }
-  }
-
-  function scrollToBottom() {
-    messagesEl.scrollTop = messagesEl.scrollHeight;
-  }
-
-  // ── Send message ──────────────────────────────────────────────
-  async function sendMessage() {
-    const text = inputEl.value.trim();
-    if (!text || isTyping) return;
-
-    inputEl.value = '';
-    autoResize(inputEl);
-    appendMessage(text, 'out');
-
-    chatHistory.push({ role: 'user', content: text });
-
-    // Keep last 12 turns
-    if (chatHistory.length > 24) chatHistory = chatHistory.slice(-24);
-
-    isTyping = true;
-    showTyping();
-
-    try {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: chatHistory }),
-      });
-
-      const data = await res.json();
-      hideTyping();
-
-      const reply = data.reply || data.error || 'Sorry, something went wrong. Please try again!';
-      appendMessage(reply, 'in');
-      chatHistory.push({ role: 'assistant', content: reply });
-
-    } catch (err) {
-      hideTyping();
-      appendMessage('Connection error. Please check your internet and try again. 🙏', 'in');
-    }
-
-    isTyping = false;
-  }
-
-  function sendQuick(text) {
-    inputEl.value = text;
-    sendMessage();
-  }
-
-  function handleKey(e) {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-  }
-
-  function autoResize(el) {
-    el.style.height = 'auto';
-    el.style.height = Math.min(el.scrollHeight, 90) + 'px';
-  }
-
-  // ── Boot greeting ─────────────────────────────────────────────
-  async function bootGreeting() {
-    showTyping();
-    await new Promise(r => setTimeout(r, 900));
-    hideTyping();
-    appendMessage(
-      "🐟 Welcome to Minutes Delivery!\n\nFresh fish & chicken delivered to your doorstep. Cut fresh daily, packed hygienically.\n\nHow can I help you today? 😊",
+  addBubble('Payment done ✅', 'out');
+  setTimeout(() => {
+    addBubble(
+      '🎉 Payment confirmed! Your order *#' + order.id + '* is placed!\n\n' +
+      '🍽️ ' + order.item.name + ' ' + order.qty + ' — ₹' + order.price + '\n' +
+      '📍 ' + order.address + '\n' +
+      '⏰ ' + order.time + '\n\n' +
+      'We are preparing your fresh order! You will be notified at each step. 🔔',
       'in'
     );
-    chatHistory.push({
-      role: 'assistant',
-      content: "Welcome to Minutes Delivery! Fresh fish & chicken delivered to your doorstep. Cut fresh daily, packed hygienically. How can I help you today?"
-    });
+    // Notify admin panel
+    if (ch) ch.postMessage({ type: 'NEW_ORDER', order: { ...order } });
+    // Save to localStorage for admin
+    localStorage.setItem('md_order', JSON.stringify({ ...order, status: 'paid', ts: Date.now() }));
+    setQR([
+      {label:'📦 Track Order',  fn:()=>{ addBubble('What is my order status?','out'); addBubble('Your order *#'+order.id+'* is confirmed and being prepared! The kitchen will update you shortly 🔔','in'); }},
+      {label:'🛒 Order Again',  fn:resetOrder},
+    ]);
+  }, 600);
+}
+
+function resetOrder() {
+  phase = 'idle';
+  order = {};
+  inEl.placeholder = 'Message';
+  defaultQR();
+  addBubble('Starting fresh! What would you like to order? 😊', 'in');
+}
+
+// ══════════════════════════════════════════════════════════════
+// MAIN SEND
+// ══════════════════════════════════════════════════════════════
+async function sendMsg() {
+  const text = inEl.value.trim();
+  if (!text || busy) return;
+  inEl.value = '';
+  resize(inEl);
+  addBubble(text, 'out');
+
+  // FSM phases that capture text input
+  if (phase === 'address') { handleAddress(text); return; }
+  if (phase === 'time')    { handleTimeText(text); return; }
+  if (phase !== 'idle')    return; // other phases ignore free text
+
+  // Detect ordering intent
+  const item = detectItem(text);
+  if (item && hasOrderIntent(text)) {
+    showItemCard(item);
+    return;
+  }
+  if (text.toLowerCase() === 'order' || text.toLowerCase() === 'order now') {
+    showCategoryMenu();
+    return;
   }
 
-  bootGreeting();
+  // Call AI
+  hist.push({role:'user', content:text});
+  if (hist.length > 20) hist = hist.slice(-20);
+  busy = true;
+  showTyping();
+
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({messages: hist}),
+    });
+    const data = await res.json();
+    hideTyping();
+
+    if (!res.ok || data.error) {
+      const em = data.error || 'Something went wrong. Try again!';
+      addBubble('⚠️ ' + em, 'in');
+      hist.push({role:'assistant', content:em});
+    } else {
+      const reply = data.reply || 'Sorry, try again!';
+      addBubble(reply, 'in');
+      hist.push({role:'assistant', content:reply});
+      // If AI mentioned an item, show Order button
+      const mentionedItem = detectItem(reply);
+      if (mentionedItem && !hasOrderIntent(text)) {
+        setTimeout(() => {
+          setQR([
+            ...qrEl.querySelectorAll('.qbtn').length ? [] : [],
+            {label: '🛒 Order ' + mentionedItem.name, cls:'order', fn:()=>showItemCard(mentionedItem)},
+            {label: '📋 Full Menu', fn:()=>quickSend('Show full menu')},
+            {label: '🛍️ Order Other', fn:showCategoryMenu},
+          ]);
+        }, 200);
+      }
+    }
+  } catch (e) {
+    hideTyping();
+    addBubble('⚠️ Could not reach server. Please try again.', 'in');
+  }
+  busy = false;
+}
+
+function quickSend(text) {
+  inEl.value = text;
+  sendMsg();
+}
+
+// ══════════════════════════════════════════════════════════════
+// BOOT
+// ══════════════════════════════════════════════════════════════
+function updateTime() {
+  const t = new Date();
+  document.getElementById('st').textContent =
+    t.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:false});
+}
+updateTime();
+setInterval(updateTime, 30000);
+
+async function boot() {
+  showTyping();
+  await new Promise(r => setTimeout(r, 800));
+  hideTyping();
+  addBubble('🐟 Welcome to *Minutes Delivery*!\n\nFresh fish & chicken delivered to your doorstep.\nCut fresh daily. Packed hygienically. 🌿\n\nHow can I help you today?', 'in');
+  defaultQR();
+}
+boot();
 </script>
 </body>
 </html>
